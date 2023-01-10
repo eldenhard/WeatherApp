@@ -1,0 +1,129 @@
+<template>
+    <div>
+        <div class="currentTime">
+            <span class="time">{{ currentTime }}</span>
+        </div>
+
+
+        <div class="weather">
+            <br>
+            <span v-for="weat in weather.weather " :key="weat.id">Cloudly : {{ weat.description }}</span>
+            <br>
+             <span >Temp : {{ weather.main}} </span>
+            <br>
+            <span >Wind : {{ weather.wind }} </span>
+            <br>
+            <span >Sunrise : {{ weather.sys }} </span>
+            <br>
+            <span >Sunset : {{ weather.sys }} </span> 
+        </div>
+      
+        <div class="weateeher">
+            <v-container v-for="align in alignments" :key="align" class="grey lighten-5 mb-6">
+                <v-row :align="align" no-gutters style="height: 150px;">
+                    <v-col>
+                        <v-card class="pa-2" justify="3">
+                            {{ this.clouds }}
+                        </v-card>
+                    </v-col>
+                    <v-col>
+                        <v-card class="pa-2" justify="3">
+                            One of three columns
+                        </v-card>
+                    </v-col>
+                    <v-col>
+                        <v-card class="pa-2" justify="3">
+                            One of three columns
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+        <!-- {{ weather }} -->
+    </div>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@100&display=swap');
+
+.currentTime {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(233, 233, 233);
+    font-family: 'Saira', sans-serif;
+}
+
+.time {
+    font-size: 160px;
+}
+
+.weather {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(233, 233, 233);
+    font-family: 'Saira', sans-serif;
+}
+.temp {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(233, 233, 233);
+    font-family: 'Saira', sans-serif; 
+}
+</style>
+
+<script>
+import axios from 'axios'
+export default {
+    name: 'Clock',
+    data() {
+        return {
+            currentTime: '',
+            weather: '',
+            clouds: '',
+            temp: '',
+            wind_speed: '',
+            sunrise: '',
+            sunset: '',
+            alignments: [
+                'center',
+            ],
+        }
+    },
+   async mounted() {
+        this.getCurrentTime()
+        setInterval(() => this.getCurrentTime(), 1000)
+        this.getCurrentWeather()
+        setInterval(() => this.getCurrentWeather(), 20000)
+    },
+    methods: {
+        getCurrentTime() {
+            let currentDate = new Date()
+            this.currentTime = [currentDate.getHours(), currentDate.getMinutes()].map(function (time) {
+                return time < 10 ? '0' + time : time
+            }).join(":")
+        },
+         getCurrentWeather() {
+            let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
+             axios.get('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&APPID=' + `${ApiKey}`)
+                .then(response => {
+                    this.weather = response.data;
+                   
+                    
+                })
+        },
+        FarenheitToCels(str){
+           return (str - 32)/1.8
+        }
+    }
+
+}
+
+
+</script>
+
