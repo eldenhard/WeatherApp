@@ -65,24 +65,24 @@ body {
 .shootingStarContainer:nth-child(1) {
     position: absolute;
     width: 100%;
-    height: 100%;
-    transform: rotate(36deg);
+    height: 50%;
+    transform: rotate(16deg);
     z-index: 10;
 }
 
 .shootingStarContainer:nth-child(2) {
     position: absolute;
     width: 100%;
-    height: 100%;
-    transform: rotate(41deg);
+    height: 50%;
+    transform: rotate(29deg);
     z-index: 10;
 }
 
 .shootingStarContainer:nth-child(3) {
     position: absolute;
     width: 100%;
-    height: 100%;
-    transform: rotate(36deg);
+    height: 50%;
+    transform: rotate(16deg);
     z-index: 10;
 }
 
@@ -379,7 +379,7 @@ body {
 }
 
 .stars {
-    background: #000 url("https://wolf.drjm.co.uk/nightsky/stars.jpg") repeat top center;
+    background: #000 url('@/assets/stars.jpg') repeat top center;
     z-index: 0;
 }
 

@@ -21,8 +21,25 @@ export default {
   name: 'Home',
   data() {
     return {
-      day: false,
-      night: true
+      day: Boolean,
+      night: Boolean
+    }
+  },
+  mounted(){
+    this.currentBackground()
+  },
+  methods: {
+    currentBackground(){
+      if(new Date().getHours() > 22){
+        this.day = false 
+        this.night = true
+        console.log('Сейчас ночь')
+      } else{
+        this.day = true 
+        this.night = false
+        console.log('Сейчас день')
+
+      }
     }
   }
 }
