@@ -24,29 +24,6 @@
         </div>
 
 
-
-        <div class="weateeher">
-            <v-container v-for="align in alignments" :key="align" class="grey lighten-5 mb-6">
-                <v-row :align="align" no-gutters style="height: 150px;">
-                    <v-col>
-                        <v-card class="pa-2" justify="3">
-                            {{ this.clouds }}
-                        </v-card>
-                    </v-col>
-                    <v-col>
-                        <v-card class="pa-2" justify="3">
-                            One of three columns
-                        </v-card>
-                    </v-col>
-                    <v-col>
-                        <v-card class="pa-2" justify="3">
-                            One of three columns
-                        </v-card>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </div>
-        <!-- {{ weather }} -->
     </div>
 </template>
 
@@ -60,6 +37,7 @@
     transform: translate(-50%, -50%);
     color: rgb(233, 233, 233);
     font-family: 'Saira', sans-serif;
+    z-index: 15 !important;
 }
 
 .time {
@@ -76,6 +54,8 @@
     background: rgba(87, 87, 87, 0.1);
     border-radius: 10px;
     box-shadow: 10px 15px rgb(189, 189, 189, 0,5);
+    z-index: 15 !important;
+
 }
 .weather-block{
     position: relative;
