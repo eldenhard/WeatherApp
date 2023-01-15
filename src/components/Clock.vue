@@ -1,13 +1,15 @@
 <template>
     <div>
         <div class="currentTime">
+            {{ weather }}
             <span class="time">{{ currentTime }}</span>
         </div>
-
+  
 
         <div class="weather">
             <br>
-            <span v-for="weat in weather.weather " :key="weat.id">Cloudly : {{ weat.description }}</span>
+            <span v-for="weat in weather.weather " :key="weat.id"> <img :src="iconSrc" alt="" class="icon">
+                : {{ weat.description }}</span>
             <br>
             <span>Temp : {{ FarenheitToCels(temp.temp) }} &#8451;</span>
             <br>
@@ -65,20 +67,18 @@
 
 .weather {
     position: absolute;
+    width: 50%;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: rgb(233, 233, 233);
     font-family: 'Saira', sans-serif;
+    background: rgba(0, 0, 0, 0.1);
 }
 
-.temp {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: rgb(233, 233, 233);
-    font-family: 'Saira', sans-serif;
+.icon {
+    width: 20px;
+    height: 15px;
 }
 </style>
 
@@ -98,13 +98,26 @@ export default {
             alignments: [
                 'center',
             ],
+            icon_cloud: '',
         }
     },
-    async mounted() {
+     mounted() {
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
         this.getCurrentWeather()
         setInterval(() => this.getCurrentWeather(), 10000)
+
+    },
+    computed: {
+        iconSrc() {
+            if (new Date().getHours() > 22) {
+                this.icon_cloud = 'Nigth.png'
+                return `/src/assets/${this.icon_cloud}`;
+            } else if (this.weather.main == 'Clouds') {
+                this.icon_cloud = 'Cloudly.png'
+                return `/src/assets/${this.icon_cloud}`;
+            }
+        }
     },
     methods: {
         getCurrentTime() {
