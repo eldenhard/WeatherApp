@@ -1,5 +1,7 @@
 <template>
     <div>
+        <Clock />
+        <div style="z-index: 0.5">
         <div class="shootingStarContainer">
             <div class="shootingStar"></div>
             <div class="shootingStar"></div>
@@ -46,10 +48,16 @@
         <div class="fogContainer">
             <div class="fog"></div>
         </div>
-
+    </div>
     </div>
 </template>
-
+<script>
+import Clock from '@/components/Clock.vue'
+export default {
+    name: 'Night',
+    components: { Clock }
+}
+</script>
 <style scoped>
 * {
     margin: 0;

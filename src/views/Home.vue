@@ -4,7 +4,6 @@
       <img src="@/assets/Mountain.jpg" alt="">
       <Clock />
     </div>
-    <!-- <AboutTech /> -->
     <div>
       <NightBlock v-if="this.night"/>
     </div>
@@ -30,7 +29,7 @@ export default {
   },
   methods: {
     currentBackground(){
-      if(new Date().getHours() > 22){
+      if(new Date().getHours() >= 22){
         this.day = false 
         this.night = true
         console.log('Сейчас ночь')

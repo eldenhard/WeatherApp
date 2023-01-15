@@ -1,21 +1,22 @@
 <template>
     <div>
         <div class="currentTime">
-            {{ weather }}
             <span class="time">{{ currentTime }}</span>
         </div>
-  
+
 
         <div class="weather">
             <br>
-            <span v-for="weat in weather.weather " :key="weat.id"> <img :src="iconSrc" alt="" class="icon">
-                : {{ weat.description }}</span>
+            <div class="weather-block">
+           <span v-for="weat in weather.weather " :key="weat.id"> <img :src="iconSrc" alt="" class="icon">
+               : {{ weat.description }}</span>
             <br>
             <span>Temp : {{ FarenheitToCels(temp.temp) }} &#8451;</span>
             <br>
             <span>Humidity : {{ temp.humidity }} %</span>
             <br>
             <span>Wind : {{ wind_speed.speed }} </span>
+        </div>
             <!-- <br>
             <span>Sunrise : {{ new Date(sunrise.sunrise) }} </span>
             <br>
@@ -64,7 +65,6 @@
 .time {
     font-size: 160px;
 }
-
 .weather {
     position: absolute;
     width: 50%;
@@ -73,12 +73,19 @@
     transform: translate(-50%, -50%);
     color: rgb(233, 233, 233);
     font-family: 'Saira', sans-serif;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(87, 87, 87, 0.1);
+    border-radius: 10px;
+    box-shadow: 10px 15px rgb(189, 189, 189, 0,5);
 }
-
+.weather-block{
+    position: relative;
+    left: 60%;
+    transform: translate(-60%,0);
+    width: 25%;
+}
 .icon {
-    width: 20px;
-    height: 15px;
+    width: 30px;
+    height: 20px;
 }
 </style>
 
@@ -101,21 +108,22 @@ export default {
             icon_cloud: '',
         }
     },
-     mounted() {
+    async mounted() {
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
         this.getCurrentWeather()
         setInterval(() => this.getCurrentWeather(), 10000)
-
     },
     computed: {
-        iconSrc() {
-            if (new Date().getHours() > 22) {
-                this.icon_cloud = 'Nigth.png'
-                return `/src/assets/${this.icon_cloud}`;
-            } else if (this.weather.main == 'Clouds') {
+        iconSrc(){
+            let currentDateWeather = new Date()
+            if(currentDateWeather.getHours() >= 22){
+                this.icon_cloud = 'Night.png'
+                return `/src/assets/${this.icon_cloud}`; 
+            } else {
                 this.icon_cloud = 'Cloudly.png'
                 return `/src/assets/${this.icon_cloud}`;
+                 
             }
         }
     },
