@@ -1,11 +1,10 @@
 <template>
   <div>
     <div class="mainPic" v-if="this.day">
-      <img src="@/assets/Mountain.jpg" alt="">
       <Clock />
     </div>
     <div>
-      <NightBlock v-if="this.night"/>
+      <NightBlock v-if="this.night" />
     </div>
 
   </div>
@@ -24,17 +23,17 @@ export default {
       night: Boolean
     }
   },
-  mounted(){
+  mounted() {
     this.currentBackground()
   },
   methods: {
-    currentBackground(){
-      if(new Date().getHours() >= 22){
-        this.day = false 
+    currentBackground() {
+      if (new Date().getHours() >= 20) {
+        this.day = false
         this.night = true
         console.log('Сейчас ночь')
-      } else{
-        this.day = true 
+      } else {
+        this.day = true
         this.night = false
         console.log('Сейчас день')
 
@@ -46,16 +45,25 @@ export default {
 
 
 <style scoped>
-.mainPic {
-  overflow: hidden;
-  width: 100%;
-  height: 100vh;
-  position: relative;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.mainPic img {
-  width: 100% !important;
+:root {
+  --index: calc(1vw + 1vh);
+  --text: #e7e7e0;
+}
+
+.mainPic {
+
+  background-image: url(@/assets/Mountain.jpg);
+  /* background-image: url(@/assets/stars.jpg); */
   height: 100% !important;
-  object-fit: cover;
+  width: 100% !important;
+  position: absolute !important;
+  background-size: cover !important;
+  background-position: center !important;
 }
 </style>

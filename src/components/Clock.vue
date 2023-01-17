@@ -5,67 +5,109 @@
         </div>
 
 
-        <div class="weather">
-            <br>
-            <div class="weather-block">
-           <span v-for="weat in weather.weather " :key="weat.id"> <img :src="iconSrc" alt="" class="icon">
-               : {{ weat.description }}</span>
-            <br>
-            <span>Temp : {{ FarenheitToCels(temp.temp) }} &#8451;</span>
-            <br>
-            <span>Humidity : {{ temp.humidity }} %</span>
-            <br>
-            <span>Wind : {{ wind_speed.speed }} </span>
+        <div class="weather" style=" z-index: 150 !important;">
+            <div class="weather-block" style=" z-index: 150 !important;">
+                <span class="weather-block__content" v-for="weat in weather.weather " :key="weat.id">
+                    <img :src="iconCloud" alt="" class="icon">
+                    : <span class="weather-block__data" style="margin-bottom: 25px !important; padding-bottom: 25px !important">{{ weat.description }}</span></span>
+                <br>
+                <span class="weather-block__content">
+                    <img :src="iconSrcTerm" alt="" class="icon"> :
+                    <span class="weather-block__data">{{ FarenheitToCels(temp.temp) }}</span>
+                    <span class="weather-block__icon">&#8451;</span></span>
+                <br>
+                <span class="weather-block__content"><img src="../assets/Humidity.png" alt="" class="icon"> :
+                    <span class="weather-block__data">{{ temp.humidity }}</span> <span
+                        class="weather-block__icon">%</span></span>
+                <br>
+                <span class="weather-block__content"><img src="../assets/Wind.png" alt="" class="icon">:
+                    <span class="weather-block__data">{{ wind_speed.speed }} </span><span
+                        class="weather-block__icon">m/sec</span></span>
+            </div>
         </div>
-            <!-- <br>
-            <span>Sunrise : {{ new Date(sunrise.sunrise) }} </span>
-            <br>
-            <span>Sunset : {{ new Date(sunset.sunset).getHours() }} </span> -->
-        </div>
+
+
+
+
 
 
     </div>
 </template>
 
-<style scoped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Saira:wght@100&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --index: calc(1vw + 1vh);
+    --text: #e7e7e0;
+}
 
 .currentTime {
     position: absolute;
-    top: 30%;
+    padding-top: calc(var(--index) * 20);
     left: 50%;
     transform: translate(-50%, -50%);
-    color: rgb(233, 233, 233);
+    color: var(--text);
     font-family: 'Saira', sans-serif;
     z-index: 15 !important;
 }
 
 .time {
-    font-size: 160px;
+    font-size: calc(var(--index) * 6);
 }
+
 .weather {
-    position: absolute;
-    width: 50%;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: rgb(233, 233, 233);
-    font-family: 'Saira', sans-serif;
-    background: rgba(87, 87, 87, 0.1);
-    border-radius: 10px;
-    box-shadow: 10px 15px rgb(189, 189, 189, 0,5);
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
     z-index: 15 !important;
+}
+
+.weather-block {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 25%;
+    padding-top: calc(var(--index) * 15);
+    font-family: 'Saira', sans-serif;
+    z-index: 15 !important;
+}
+
+.weather-block__content {
+    color: var(--text);
+    font-size: calc(var(--index) * .8);
+    letter-spacing: calc(var(--index) / 10);
+}
+
+.weather-block__icon {
+    font-size: calc(var(--index) * 0.65);
+    padding-top: calc(var(--index) * 15);
+    color: #ccccc6;
 
 }
-.weather-block{
-    position: relative;
-    left: 60%;
-    transform: translate(-60%,0);
-    width: 25%;
-}
+
 .icon {
-    width: 30px;
-    height: 20px;
+    width: calc(var(--index) * 2);
+    height: calc(var(--index) * 2);
+}
+
+@media screen and (max-width: 600px) {
+    .currentTime {
+        padding-top: calc(var(--index) * 50);
+    }
+
+    .weather-block {
+        padding-top: calc(var(--index) * 30);
+    }
+
 }
 </style>
 
@@ -76,6 +118,7 @@ export default {
     data() {
         return {
             currentTime: '',
+            seconds: '',
             weather: '',
             clouds: '',
             temp: '',
@@ -88,22 +131,31 @@ export default {
             icon_cloud: '',
         }
     },
-    async mounted() {
+    mounted() {
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
         this.getCurrentWeather()
         setInterval(() => this.getCurrentWeather(), 10000)
     },
     computed: {
-        iconSrc(){
+        iconCloud() {
             let currentDateWeather = new Date()
-            if(currentDateWeather.getHours() >= 22){
-                this.icon_cloud = 'Night.png'
-                return `/src/assets/${this.icon_cloud}`; 
-            } else {
-                this.icon_cloud = 'Cloudly.png'
+            if (currentDateWeather.getHours() <= 20) {
+                this.icon_cloud = 'Cloud.png'
                 return `/src/assets/${this.icon_cloud}`;
-                 
+            } else {
+                this.icon_cloud = 'Night.png'
+                return `/src/assets/${this.icon_cloud}`;
+
+            }
+        },
+        iconSrcTerm() {
+            if (this.temp.temp >= 0) {
+                this.icon_cloud = 'TempPlus.png'
+                return `/src/assets/${this.icon_cloud}`;
+            } else {
+                this.icon_cloud = 'TempMin.png'
+                return `/src/assets/${this.icon_cloud}`;
             }
         }
     },
@@ -118,6 +170,7 @@ export default {
             let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
             axios.get('https://api.openweathermap.org/data/2.5/weather?lat=55.85832197778835&lon=37.58639574050904&APPID=' + `${ApiKey}`)
                 .then(response => {
+
                     this.weather = response.data;
                     this.temp = response.data.main;
                     this.wind_speed = response.data.wind

@@ -2,7 +2,7 @@
    
     <div>
         <Clock />    
-        <div class="shootingStarContainer">
+        <!-- <div class="shootingStarContainer">
             <div class="shootingStar"></div>
             <div class="shootingStar"></div>
             <div class="shootingStar"></div>
@@ -37,7 +37,7 @@
             <div class="shootingStar"></div>
             <div class="shootingStar"></div>
             <div class="shootingStar"></div>
-        </div>
+        </div> -->
 
 
         <div class="stars"></div>
@@ -45,9 +45,9 @@
         <div class="twinkleMask2"></div>
         <div class="clouds"></div>
 
-        <div class="fogContainer">
+        <!-- <div class="fogContainer">
             <div class="fog"></div>
-        </div>
+        </div> -->
     </div>
 
 </template>
@@ -75,7 +75,6 @@ body {
     width: 100%;
     height: 50%;
     transform: rotate(16deg);
-    z-index: 10;
 }
 
 .shootingStarContainer:nth-child(2) {
