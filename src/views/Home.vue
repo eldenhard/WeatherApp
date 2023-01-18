@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loader :loader="loader" />
     <div class="mainPic" v-if="this.day">
       <Clock />
     </div>
@@ -14,17 +15,21 @@
 import NightBlock from '@/components/NightBlock.vue'
 import Clock from '@/components/Clock.vue'
 import AboutTech from '@/components/AboutTech.vue'
+import Loader from '@/components/Loader.vue'
 export default {
-  components: { Clock, AboutTech, NightBlock },
+  components: { Clock, AboutTech, NightBlock, Loader },
   name: 'Home',
   data() {
     return {
       day: Boolean,
-      night: Boolean
+      night: Boolean,
+      loader: false
     }
   },
   mounted() {
+    this.loader = true
     this.currentBackground()
+    this.loader = false
   },
   methods: {
     currentBackground() {

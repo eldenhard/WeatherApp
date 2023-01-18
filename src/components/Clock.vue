@@ -9,20 +9,23 @@
             <div class="weather-block" style=" z-index: 150 !important;">
                 <span class="weather-block__content" v-for="weat in weather.weather " :key="weat.id">
                     <img :src="iconCloud" alt="" class="icon">
-                    : <span class="weather-block__data" style="margin-bottom: 25px !important; padding-bottom: 25px !important">{{ weat.description }}</span></span>
+                    <span class="weather-block__data"
+                        style="margin-bottom: 25px !important; padding-bottom: 25px !important">
+                         : {{weat.description }} 
+                        </span></span>
                 <br>
                 <span class="weather-block__content">
-                    <img :src="iconSrcTerm" alt="" class="icon"> :
-                    <span class="weather-block__data">{{ FarenheitToCels(temp.temp) }}</span>
-                    <span class="weather-block__icon">&#8451;</span></span>
+                    <img :src="iconSrcTerm" alt="" class="icon">
+                    <span class="weather-block__data"> :{{ FarenheitToCels(temp.temp) }}
+                        <span class="weather-block__icon">&#8451;</span></span></span>
                 <br>
-                <span class="weather-block__content"><img src="../assets/Humidity.png" alt="" class="icon"> :
-                    <span class="weather-block__data">{{ temp.humidity }}</span> <span
-                        class="weather-block__icon">%</span></span>
+                <span class="weather-block__content"><img src="../assets/Humidity.png" alt="" class="icon">
+                    <span class="weather-block__data"> :{{ temp.humidity }} <span
+                            class="weather-block__icon">%</span></span></span>
                 <br>
-                <span class="weather-block__content"><img src="../assets/Wind.png" alt="" class="icon">:
-                    <span class="weather-block__data">{{ wind_speed.speed }} </span><span
-                        class="weather-block__icon">m/sec</span></span>
+                <span class="weather-block__content"><img src="../assets/Wind.png" alt="" class="icon">
+                    <span class="weather-block__data"> :{{ wind_speed.speed }} <span
+                            class="weather-block__icon">m/sec</span></span></span>
             </div>
         </div>
 
@@ -87,6 +90,11 @@
     letter-spacing: calc(var(--index) / 10);
 }
 
+.weather-block__data {
+    position: relative;
+    bottom: 13px;
+}
+
 .weather-block__icon {
     font-size: calc(var(--index) * 0.65);
     padding-top: calc(var(--index) * 15);
@@ -125,6 +133,7 @@ export default {
             wind_speed: '',
             sunrise: '',
             sunset: '',
+            geo: '',
             alignments: [
                 'center',
             ],
@@ -132,6 +141,9 @@ export default {
         }
     },
     mounted() {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            this.geo = position.coords.longitude
+        })
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
         this.getCurrentWeather()
