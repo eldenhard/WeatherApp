@@ -26,15 +26,18 @@ export default {
     right: 0;
     left: 0;
     background-color: #000000;
-    z-index: 150 !important;
-
+    z-index: 160 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .loader {
     color: #fff;
     font-family: Consolas, Menlo, Monaco, monospace;
     font-weight: bold;
-    font-size: 30vh;
+    font-size: 25vh;
     opacity: 0.8;
+    
 }
 
 .loader span {

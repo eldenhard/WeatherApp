@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Loader :loader="loader" />
         <div class="currentTime">
             <span class="time">{{ currentTime }}</span>
         </div>
@@ -11,8 +12,8 @@
                     <img :src="iconCloud" alt="" class="icon">
                     <span class="weather-block__data"
                         style="margin-bottom: 25px !important; padding-bottom: 25px !important">
-                         : {{weat.description }} 
-                        </span></span>
+                        : {{ weat.description }}
+                    </span></span>
                 <br>
                 <span class="weather-block__content">
                     <img :src="iconSrcTerm" alt="" class="icon">
@@ -121,8 +122,10 @@
 
 <script>
 import axios from 'axios'
+import Loader from './Loader.vue'
 export default {
     name: 'Clock',
+    components: { Loader },
     data() {
         return {
             currentTime: '',
@@ -138,12 +141,15 @@ export default {
                 'center',
             ],
             icon_cloud: '',
+            loader: false
         }
     },
     mounted() {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            this.geo = position.coords.longitude
-        })
+        // navigator.geolocation.getCurrentPosition(function(position) {
+        //     this.geo = position.coords.longitude
+        // })
+        this.loader = true
+        setTimeout(() => this.loader = false, 1500)
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
         this.getCurrentWeather()
