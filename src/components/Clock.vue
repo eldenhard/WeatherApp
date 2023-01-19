@@ -134,9 +134,9 @@ export default {
             clouds: '',
             temp: '',
             wind_speed: '',
-            sunrise: '',
-            sunset: '',
-            geo: '',
+            lat: '',
+            long: '',
+
             alignments: [
                 'center',
             ],
@@ -145,15 +145,23 @@ export default {
         }
     },
     mounted() {
-        // navigator.geolocation.getCurrentPosition(function(position) {
-        //     this.geo = position.coords.longitude
-        // })
-        this.loader = true
-        setTimeout(() => this.loader = false, 1500)
+
+        // this.loader = true
+        const promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                navigator.geolocation.getCurrentPosition(position => {
+                this.lat = position.coords.latitude
+                this.long = position.coords.longitude
+            })
+            }, 3000)
+   
+        })
         this.getCurrentTime()
         setInterval(() => this.getCurrentTime(), 1000)
-        this.getCurrentWeather()
-        setInterval(() => this.getCurrentWeather(), 10000)
+        // setTimeout(() => this.loader = false, 1500)
+
+        // promise.then(this.getCurrentWeather())
+        // promise.then(setInterval(() => this.getCurrentWeather(), 5000))
     },
     computed: {
         iconCloud() {
@@ -186,7 +194,7 @@ export default {
         },
         getCurrentWeather() {
             let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
-            axios.get('https://api.openweathermap.org/data/2.5/weather?lat=55.85832197778835&lon=37.58639574050904&APPID=' + `${ApiKey}`)
+            axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
                 .then(response => {
 
                     this.weather = response.data;
@@ -198,7 +206,11 @@ export default {
         },
         FarenheitToCels(str) {
             return Math.floor(Number(str - 273, 15))
-        }
+        },
+
+
+
+
     }
 
 }
