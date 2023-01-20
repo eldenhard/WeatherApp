@@ -5,9 +5,8 @@
             <span class="time">{{ currentTime }}</span>
         </div>
 
-
-        <div class="weather" style=" z-index: 150 !important;">
-            <div class="weather-block" style=" z-index: 150 !important;">
+        <div class="weather">
+            <div class="weather-block">
                 <span class="weather-block__content" v-for="weat in weather.weather " :key="weat.id">
                     <img :src="iconCloud" alt="" class="icon">
                     <span class="weather-block__data"
@@ -28,12 +27,14 @@
                     <span class="weather-block__data"> :{{ wind_speed.speed }} <span
                             class="weather-block__icon">m/sec</span></span></span>
             </div>
+            <div class="geodata">
+                <span>Ваши геоданные: <span>
+                Lat: {{ this.lat }}
+                Long:  {{ this.long }}
+            </span>
+            </span>
+            </div>
         </div>
-
-
-
-
-
 
     </div>
 </template>
@@ -72,7 +73,7 @@
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    z-index: 15 !important;
+    z-index: 150 !important;
 }
 
 .weather-block {
@@ -82,7 +83,7 @@
     width: 25%;
     padding-top: calc(var(--index) * 15);
     font-family: 'Saira', sans-serif;
-    z-index: 15 !important;
+    z-index: 150 !important;
 }
 
 .weather-block__content {
@@ -102,7 +103,12 @@
     color: #ccccc6;
 
 }
-
+.geodata {
+    color: #ccccc6;
+    position: absolute;
+    right: calc(var(--index) * 1);
+    bottom: 10px;
+}
 .icon {
     width: calc(var(--index) * 2);
     height: calc(var(--index) * 2);
@@ -145,23 +151,15 @@ export default {
         }
     },
     mounted() {
-
-        // this.loader = true
-        const promise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                navigator.geolocation.getCurrentPosition(position => {
-                this.lat = position.coords.latitude
-                this.long = position.coords.longitude
-            })
-            }, 3000)
-   
-        })
+        this.loader = true
+        setTimeout(() => this.loader = false, 3100)
         this.getCurrentTime()
-        setInterval(() => this.getCurrentTime(), 1000)
-        // setTimeout(() => this.loader = false, 1500)
-
-        // promise.then(this.getCurrentWeather())
-        // promise.then(setInterval(() => this.getCurrentWeather(), 5000))
+        navigator.geolocation.getCurrentPosition(position => {
+            this.lat = position.coords.latitude
+            this.long = position.coords.longitude
+            console.log(position)
+            this.getCurrentWeather()
+        })
     },
     computed: {
         iconCloud() {
@@ -187,22 +185,30 @@ export default {
     },
     methods: {
         getCurrentTime() {
-            let currentDate = new Date()
-            this.currentTime = [currentDate.getHours(), currentDate.getMinutes()].map(function (time) {
-                return time < 10 ? '0' + time : time
-            }).join(":")
+            setInterval(() => {
+                let currentDate = new Date()
+                this.currentTime = [currentDate.getHours(), currentDate.getMinutes()].map(function (time) {
+                    return time < 10 ? '0' + time : time
+                }).join(":")
+            }, 1000)
+
         },
         getCurrentWeather() {
-            let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
-            axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
-                .then(response => {
+            let interval = setInterval(() => {
+                let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
+                axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
+                    .then(response => {
+                        this.weather = response.data;
+                        this.temp = response.data.main;
+                        this.wind_speed = response.data.wind
+                        this.sunrise = response.data.sys
+                        this.sunset = response.data.sys
+                    }).catch(error => {
+                        console.log(new Error('Данные не получены, перезагрузите браузер'))
+                        clearInterval(interval)
+                    })
+            }, 3000)
 
-                    this.weather = response.data;
-                    this.temp = response.data.main;
-                    this.wind_speed = response.data.wind
-                    this.sunrise = response.data.sys
-                    this.sunset = response.data.sys
-                })
         },
         FarenheitToCels(str) {
             return Math.floor(Number(str - 273, 15))
