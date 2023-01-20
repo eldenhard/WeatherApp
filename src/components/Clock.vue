@@ -109,6 +109,7 @@
     right: calc(var(--index) * 1);
     bottom: 10px;
     font-size: calc(var(--index)* 0.4);
+    z-index: 150;
 }
 .icon {
     width: calc(var(--index) * 2);
@@ -139,17 +140,11 @@ export default {
     data() {
         return {
             currentTime: '',
-            seconds: '',
             weather: '',
-            clouds: '',
             temp: '',
             wind_speed: '',
             lat: '',
             long: '',
-
-            alignments: [
-                'center',
-            ],
             icon_cloud: '',
             loader: false
         }
@@ -158,12 +153,9 @@ export default {
         this.loader = true
         setTimeout(() => this.loader = false, 3100)
         this.getCurrentTime()
-        navigator.geolocation.getCurrentPosition(position => {
-            this.lat = position.coords.latitude
-            this.long = position.coords.longitude
-            console.log(position)
-            this.getCurrentWeather()
-        })
+        this.getCurrentPosition()
+        this.getCurrentWeather()
+
     },
     computed: {
         iconCloud() {
@@ -205,8 +197,6 @@ export default {
                         this.weather = response.data;
                         this.temp = response.data.main;
                         this.wind_speed = response.data.wind
-                        this.sunrise = response.data.sys
-                        this.sunset = response.data.sys
                     }).catch(error => {
                         console.log(new Error('Данные не получены, перезагрузите браузер'))
                         clearInterval(interval)
@@ -214,12 +204,15 @@ export default {
             }, 3000)
 
         },
+        getCurrentPosition(){
+            navigator.geolocation.getCurrentPosition(position => {
+            this.lat = position.coords.latitude
+            this.long = position.coords.longitude
+        })
+        },
         FarenheitToCels(str) {
             return Math.floor(Number(str - 273, 15))
         },
-
-
-
 
     }
 
