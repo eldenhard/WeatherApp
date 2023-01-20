@@ -108,6 +108,7 @@
     position: absolute;
     right: calc(var(--index) * 1);
     bottom: 10px;
+    font-size: calc(var(--index)* 0.4);
 }
 .icon {
     width: calc(var(--index) * 2);
@@ -121,6 +122,9 @@
 
     .weather-block {
         padding-top: calc(var(--index) * 30);
+    }
+    .geodata{
+        font-size: calc(var(--index)* 0.8);
     }
 
 }
