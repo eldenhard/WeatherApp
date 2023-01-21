@@ -16,7 +16,7 @@
                 <br>
                 <span class="weather-block__content">
                     <img :src="iconSrcTerm" alt="" class="icon">
-                    <span class="weather-block__data"> :{{ FarenheitToCels(temp.temp) }}
+                    <span class="weather-block__data"> :{{ KelvinToCels(temp.temp) }}
                         <span class="weather-block__icon">&#8451;</span></span></span>
                 <br>
                 <span class="weather-block__content"><img src="../assets/Humidity.png" alt="" class="icon">
@@ -29,10 +29,10 @@
             </div>
             <div class="geodata">
                 <span>Ваши геоданные: <span>
-                Lat: {{ this.lat }}
-                Long:  {{ this.long }}
-            </span>
-            </span>
+                        Lat: {{ this.lat }}
+                        Long: {{ this.long }}
+                    </span>
+                </span>
             </div>
         </div>
 
@@ -103,6 +103,7 @@
     color: #ccccc6;
 
 }
+
 .geodata {
     color: #ccccc6;
     position: absolute;
@@ -111,6 +112,7 @@
     font-size: calc(var(--index)* 0.4);
     z-index: 150;
 }
+
 .icon {
     width: calc(var(--index) * 2);
     height: calc(var(--index) * 2);
@@ -124,7 +126,8 @@
     .weather-block {
         padding-top: calc(var(--index) * 30);
     }
-    .geodata{
+
+    .geodata {
         font-size: calc(var(--index)* 0.8);
     }
 
@@ -146,15 +149,16 @@ export default {
             lat: '',
             long: '',
             icon_cloud: '',
+            icon_term: '',
             loader: false
         }
     },
-    mounted() {
+     mounted() {
         this.loader = true
         setTimeout(() => this.loader = false, 3100)
         this.getCurrentTime()
-        this.getCurrentPosition()
-        this.getCurrentWeather()
+         this.getCurrentPosition()
+         this.getCurrentWeather()
 
     },
     computed: {
@@ -170,12 +174,12 @@ export default {
             }
         },
         iconSrcTerm() {
-            if (this.temp.temp >= 0) {
-                this.icon_cloud = 'TempPlus.png'
-                return `/src/assets/${this.icon_cloud}`;
+            if (this.temp.temp >= 273.15) {
+                this.icon_term = 'TempPlus.png'
+                return `/src/assets/${this.icon_term}`;
             } else {
-                this.icon_cloud = 'TempMin.png'
-                return `/src/assets/${this.icon_cloud}`;
+                this.icon_term = 'TempMin.png'
+                return `/src/assets/${this.icon_term}`;
             }
         }
     },
@@ -199,19 +203,18 @@ export default {
                         this.wind_speed = response.data.wind
                     }).catch(error => {
                         console.log(new Error('Данные не получены, перезагрузите браузер'))
-                        clearInterval(interval)
                     })
-            }, 3000)
-
+            }, 10000)
         },
-        getCurrentPosition(){
-            navigator.geolocation.getCurrentPosition(position => {
-            this.lat = position.coords.latitude
-            this.long = position.coords.longitude
-        })
+        getCurrentPosition() {
+                navigator.geolocation.getCurrentPosition(position => {
+                    this.lat = position.coords.latitude
+                    this.long = position.coords.longitude
+                })
+                // console.log('0000000000')
         },
-        FarenheitToCels(str) {
-            return Math.floor(Number(str - 273, 15))
+        KelvinToCels(str) {
+            return Math.floor(Number(str - 273,15))
         },
 
     }
