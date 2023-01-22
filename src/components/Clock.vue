@@ -1,6 +1,7 @@
 <template>
     <div>
         <Loader :loader="loader" />
+        <Notifications :snackbar="snackbar" />
         <div class="currentTime">
             <span class="time">{{ currentTime }}</span>
         </div>
@@ -137,9 +138,10 @@
 <script>
 import axios from 'axios'
 import Loader from './Loader.vue'
+import Notifications from './Notifications.vue'
 export default {
     name: 'Clock',
-    components: { Loader },
+    components: { Loader, Notifications },
     data() {
         return {
             currentTime: '',
@@ -150,15 +152,17 @@ export default {
             long: '',
             icon_cloud: '',
             icon_term: '',
-            loader: false
+            loader: false,
+            snackbar: false
         }
     },
      mounted() {
-        this.loader = true
-        setTimeout(() => this.loader = false, 3100)
+        // this.loader = true
+        // setTimeout(() => this.loader = false, 3100)
+        this.snackbar = true;
         this.getCurrentTime()
-         this.getCurrentPosition()
-         this.getCurrentWeather()
+        this.getCurrentPosition()
+        this.getCurrentWeather()
 
     },
     computed: {
@@ -203,6 +207,7 @@ export default {
                         this.wind_speed = response.data.wind
                     }).catch(error => {
                         console.log(new Error('Данные не получены, перезагрузите браузер'))
+                        clearInterval(interval)
                     })
             }, 10000)
         },
