@@ -1,7 +1,17 @@
 <template>
     <div>
+        <div class="text-center ma-2">
+            <v-snackbar v-model="snackbar">
+                <p>Здравствуйте, {{ mainText }}</p>
+                <template v-slot:action="{ attrs }" style="z-index: 2000 !important">
+                    <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+        </div>
         <Loader :loader="loader" />
-        <Notifications :snackbar="snackbar" />
+        <!-- <Notifications :snackbar="snackbar" :text="text" :timeout="timeout"/> -->
         <div class="currentTime">
             <span class="time">{{ currentTime }}</span>
         </div>
@@ -47,6 +57,11 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+.text-center {
+    position: fixed;
+    top: 0;
 }
 
 :root {
@@ -141,7 +156,7 @@ import Loader from './Loader.vue'
 import Notifications from './Notifications.vue'
 export default {
     name: 'Clock',
-    components: { Loader, Notifications },
+    components: { Loader, },
     data() {
         return {
             currentTime: '',
@@ -153,10 +168,13 @@ export default {
             icon_cloud: '',
             icon_term: '',
             loader: false,
-            snackbar: false
+
+            snackbar: true,
+            mainText: '',
+            timeout: 2000,
         }
     },
-     mounted() {
+    mounted() {
         // this.loader = true
         // setTimeout(() => this.loader = false, 3100)
         this.snackbar = true;
@@ -185,7 +203,24 @@ export default {
                 this.icon_term = 'TempMin.png'
                 return `/src/assets/${this.icon_term}`;
             }
+        },
+        partOfDay() {
+            return new Promise((resolve, reject) => {
+                let currentTime = new Date().getHours()
+                if (currentTime > 6 && currentTime < 12) return this.mainText = 'Доброе утро';
+                if (currentTime > 12 && currentTime < 18) return this.mainText = 'Добрый день';
+                if (currentTime > 18 && currentTime < 0) return this.mainText = 'Добрый вечер';
+                if (currentTime > 0 && currentTime < 6) return this.mainText = 'Доброй ночи';
+                if (this.mainText) {
+                    return resolve(this.mainText)
+                } else {
+                    reject(new Error('Ошибка. данных нет'))
+                }
+            })
+
+
         }
+
     },
     methods: {
         getCurrentTime() {
@@ -212,14 +247,14 @@ export default {
             }, 10000)
         },
         getCurrentPosition() {
-                navigator.geolocation.getCurrentPosition(position => {
-                    this.lat = position.coords.latitude
-                    this.long = position.coords.longitude
-                })
-                // console.log('0000000000')
+            navigator.geolocation.getCurrentPosition(position => {
+                this.lat = position.coords.latitude
+                this.long = position.coords.longitude
+            })
+            // console.log('0000000000')
         },
         KelvinToCels(str) {
-            return Math.floor(Number(str - 273,15))
+            return Math.floor(Number(str - 273, 15))
         },
 
     }

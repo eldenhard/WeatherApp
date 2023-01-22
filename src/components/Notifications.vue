@@ -1,6 +1,6 @@
 <template>
     <div class="text-center ma-2">
-        <v-snackbar v-if="snackbar">
+        <v-snackbar v-model="snackbar">
             <p>Здравствуйте, {{this.partOfDay}}</p>
             <template v-slot:action="{ attrs }" style="z-index: 2000 !important">
                 <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
@@ -21,11 +21,12 @@
 export default {
     name: 'notifications',
     props: {
-        snackbar: false
+        snackbar: false,
+        text: String,
     },
     data() {
         return {
-            snackbar: false,
+            snackbar: true,
             text: '',
             timeout: 2000,
         }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :loader="loader" />
+    <Loader :loader="loader" :text="text" />
     <div class="mainPic" v-if="this.day">
       <Clock />
     </div>
@@ -36,11 +36,9 @@ export default {
       if (new Date().getHours() >= 20) {
         this.day = false
         this.night = true
-        console.log('Сейчас ночь')
       } else {
         this.day = true
         this.night = false
-        console.log('Сейчас день')
 
       }
     }
