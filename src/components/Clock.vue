@@ -169,7 +169,7 @@ export default {
             icon_term: '',
             loader: false,
 
-            snackbar: true,
+
             mainText: '',
             timeout: 2000,
         }
@@ -177,8 +177,10 @@ export default {
     mounted() {
         this.loader = true
         setTimeout(() => this.loader = false, 2100)
-        this.snackbar = true;
+
         this.getCurrentTime()
+        
+       this.getCurrentPosition()
         this.getCurrentPosition()
         this.getCurrentWeather()
         setInterval(() => this.getCurrentWeather(), 2500)
