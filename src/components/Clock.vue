@@ -175,12 +175,13 @@ export default {
         }
     },
     mounted() {
-        // this.loader = true
-        // setTimeout(() => this.loader = false, 3100)
+        this.loader = true
+        setTimeout(() => this.loader = false, 2100)
         this.snackbar = true;
         this.getCurrentTime()
         this.getCurrentPosition()
         this.getCurrentWeather()
+        setInterval(() => this.getCurrentWeather(), 2500)
 
     },
     computed: {
@@ -233,8 +234,7 @@ export default {
 
         },
         getCurrentWeather() {
-            let interval = setInterval(() => {
-                let ApiKey = 'd251f5d1371952ee5d01f6805fac142f'
+                let ApiKey = 'ea9eb2154a207351366a2b982d9de1c2'
                 axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
                     .then(response => {
                         this.weather = response.data;
@@ -242,9 +242,7 @@ export default {
                         this.wind_speed = response.data.wind
                     }).catch(error => {
                         console.log(new Error('Данные не получены, перезагрузите браузер'))
-                        clearInterval(interval)
                     })
-            }, 10000)
         },
         getCurrentPosition() {
             navigator.geolocation.getCurrentPosition(position => {
