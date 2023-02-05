@@ -153,10 +153,9 @@
 <script>
 import axios from 'axios'
 import Loader from './Loader.vue'
-import Notifications from './Notifications.vue'
 export default {
     name: 'Clock',
-    components: { Loader, },
+    components: { Loader},
     data() {
         return {
             currentTime: '',
@@ -168,8 +167,6 @@ export default {
             icon_cloud: '',
             icon_term: '',
             loader: false,
-
-
             mainText: '',
             timeout: 2000,
         }
@@ -251,7 +248,6 @@ export default {
                 this.lat = position.coords.latitude
                 this.long = position.coords.longitude
             })
-            // console.log('0000000000')
         },
         KelvinToCels(str) {
             return Math.floor(Number(str - 273, 15))
