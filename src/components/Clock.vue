@@ -1,17 +1,7 @@
 <template>
     <div>
-        <div class="text-center ma-2">
-            <v-snackbar v-model="snackbar">
-                <p>Здравствуйте, {{ mainText }}</p>
-                <template v-slot:action="{ attrs }" style="z-index: 2000 !important">
-                    <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-                        Close
-                    </v-btn>
-                </template>
-            </v-snackbar>
-        </div>
+        <Modal />
         <Loader :loader="loader" />
-        <!-- <Notifications :snackbar="snackbar" :text="text" :timeout="timeout"/> -->
         <div class="currentTime">
             <span class="time">{{ currentTime }}</span>
         </div>
@@ -153,9 +143,10 @@
 <script>
 import axios from 'axios'
 import Loader from './Loader.vue'
+import Modal from './Modal.vue'
 export default {
     name: 'Clock',
-    components: { Loader},
+    components: { Loader, Modal },
     data() {
         return {
             currentTime: '',
@@ -169,17 +160,14 @@ export default {
             loader: false,
             mainText: '',
             timeout: 2000,
+
         }
     },
     mounted() {
         this.loader = true
-        setTimeout(() => this.loader = false, 2100)
+        // setTimeout(() => this.loader = false, 2100)
+        this.loadingData()
 
-        this.getCurrentTime()
-        
-       this.getCurrentPosition()
-        this.getCurrentPosition()
-        this.getCurrentWeather()
         setInterval(() => this.getCurrentWeather(), 2500)
 
     },
@@ -204,25 +192,18 @@ export default {
                 return `/src/assets/${this.icon_term}`;
             }
         },
-        partOfDay() {
-            return new Promise((resolve, reject) => {
-                let currentTime = new Date().getHours()
-                if (currentTime > 6 && currentTime < 12) return this.mainText = 'Доброе утро';
-                if (currentTime > 12 && currentTime < 18) return this.mainText = 'Добрый день';
-                if (currentTime > 18 && currentTime < 0) return this.mainText = 'Добрый вечер';
-                if (currentTime > 0 && currentTime < 6) return this.mainText = 'Доброй ночи';
-                if (this.mainText) {
-                    return resolve(this.mainText)
-                } else {
-                    reject(new Error('Ошибка. данных нет'))
-                }
-            })
-
-
-        }
-
     },
     methods: {
+        loadingData() {
+            Promise.all([this.getCurrentTime(), this.getCurrentPosition(), this.getCurrentWeather()])
+            .then(values => {
+                this.loader = false
+                console.log(values);
+            });
+            // this.getCurrentTime()
+            // this.getCurrentPosition()
+            // this.getCurrentWeather()
+        },
         getCurrentTime() {
             setInterval(() => {
                 let currentDate = new Date()
@@ -233,15 +214,15 @@ export default {
 
         },
         getCurrentWeather() {
-                let ApiKey = 'ea9eb2154a207351366a2b982d9de1c2'
-                axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
-                    .then(response => {
-                        this.weather = response.data;
-                        this.temp = response.data.main;
-                        this.wind_speed = response.data.wind
-                    }).catch(error => {
-                        console.log(new Error('Данные не получены, перезагрузите браузер'))
-                    })
+            let ApiKey = 'ea9eb2154a207351366a2b982d9de1c2'
+            axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.long}&APPID=` + `${ApiKey}`)
+                .then(response => {
+                    this.weather = response.data;
+                    this.temp = response.data.main;
+                    this.wind_speed = response.data.wind
+                }).catch(error => {
+                    console.log(new Error('Данные не получены, перезагрузите браузер'))
+                })
         },
         getCurrentPosition() {
             navigator.geolocation.getCurrentPosition(position => {

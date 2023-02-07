@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader :loader="loader" :text="text" />
+    <Loader :loader="loader" />
     <div class="mainPic" v-if="this.day">
       <Clock />
     </div>
