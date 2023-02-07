@@ -1,5 +1,5 @@
 <template>
-    <div class="loader-wrapper" v-if="loader">
+    <div class="loader-wrapper" v-if="loader" style="z-index: 300 !important;">
         <div class="loader" >
             <span>{</span><span>}</span>
         </div>

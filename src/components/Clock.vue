@@ -165,11 +165,9 @@ export default {
     },
     mounted() {
         this.loader = true
-        // setTimeout(() => this.loader = false, 2100)
+        setTimeout(() => this.loader = false, 3000)
         this.loadingData()
-
         setInterval(() => this.getCurrentWeather(), 2500)
-
     },
     computed: {
         iconCloud() {
@@ -197,12 +195,11 @@ export default {
         loadingData() {
             Promise.all([this.getCurrentTime(), this.getCurrentPosition(), this.getCurrentWeather()])
             .then(values => {
-                this.loader = false
-                console.log(values);
-            });
-            // this.getCurrentTime()
-            // this.getCurrentPosition()
-            // this.getCurrentWeather()
+                console.log(values)
+            }).catch(error => {
+                return (new Error('ОШИБКА ПОЛУЧЕНИЯ ДАННЫХ'))
+            })
+
         },
         getCurrentTime() {
             setInterval(() => {

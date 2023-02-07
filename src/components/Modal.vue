@@ -2,7 +2,7 @@
     <div class="text-center ma-2">
         <v-snackbar v-model="snackbar">
             <p>Здравствуйте, {{ partOfDay }}</p>
-            <template v-slot:action="{ attrs }" style="z-index: 2000 !important">
+            <template v-slot:action="{ attrs }" style="z-index: 20 !important">
                 <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
                     Close
                 </v-btn>
