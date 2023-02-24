@@ -1,6 +1,8 @@
 <template>
     <div>
-        <Modal />
+        <Modal :text="partOfDay">
+            <p align="center">Мы рады вас видеть</p>
+        </Modal>
         <Loader :loader="loader" />
         <div class="currentTime">
             <span class="time">{{ currentTime }}</span>
@@ -160,12 +162,14 @@ export default {
             loader: false,
             mainText: '',
             timeout: 2000,
+            text: 'пРИВЕТ Я ПРОПС'
 
         }
     },
     mounted() {
         this.loader = true
         setTimeout(() => this.loader = false, 3000)
+        this.getCurrentTime()
         this.loadingData()
         setInterval(() => this.getCurrentWeather(), 2500)
     },
@@ -190,15 +194,43 @@ export default {
                 return `/src/assets/${this.icon_term}`;
             }
         },
+        partOfDay() {
+            console.log(new Date().getHours())
+            if (new Date().getHours() > 6 || new Date().getHours() < 12) {
+                return 'Доброе утро';
+            }
+            if (new Date().getHours() > 13 || new Date().getHours() < 18) {
+                return 'Добрый день'
+            }
+            if (new Date().getHours() > 19 || new Date().getHours() < 0) {
+
+                return 'Добрый вечер';
+            }
+            if (new Date().getHours() > 1 || new Date().getHours() < 5) {
+                return 'Доброй ночи'
+            } else {
+                return 'ОШИБКА'
+            }
+
+        }
+
     },
     methods: {
         loadingData() {
-            Promise.all([this.getCurrentTime(), this.getCurrentPosition(), this.getCurrentWeather()])
-            .then(values => {
-                console.log(values)
-            }).catch(error => {
-                return (new Error('ОШИБКА ПОЛУЧЕНИЯ ДАННЫХ'))
-            })
+            // Promise.all([this.getCurrentTime(), this.getCurrentPosition(), this.getCurrentWeather()])
+            //     .then(values => {
+            //         console.log(values)
+            //     }).catch(error => {
+            //         return (new Error('ОШИБКА ПОЛУЧЕНИЯ ДАННЫХ'))
+            //     })
+
+           this.getCurrentPosition()
+                .then(script => loadScript(this.getCurrentWeather()))
+                .then(script => {
+                    // скрипты загружены, мы можем использовать объявленные в них функции
+                    this.getCurrentPosition();
+                    this.getCurrentWeather();
+                });
 
         },
         getCurrentTime() {

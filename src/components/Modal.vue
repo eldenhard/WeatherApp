@@ -1,12 +1,8 @@
 <template>
     <div class="text-center ma-2">
         <v-snackbar v-model="snackbar">
-            <p>Здравствуйте, {{ partOfDay }}</p>
-            <template v-slot:action="{ attrs }" style="z-index: 20 !important">
-                <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-                    Close
-                </v-btn>
-            </template>
+            <p align="center"> {{ text }}</p>
+           <slot></slot>
         </v-snackbar>
     </div>
 
@@ -21,30 +17,7 @@ export default {
             mainText: ''
         }
     },
-    computed: {
-        partOfDay: function() {
-            let currentTime = new Date().getHours()
-            console.log(typeof currentTime)
-            if (currentTime > 6 && currentTime < 12) {
-                console.log('1')
-                return this.mainText = 'Доброе утро';
-            }
-            if (currentTime > 12 && currentTime < 18) {
-                console.log('2')
-                return this.mainText = 'Добрый день'
-            }
-            if (currentTime > 18 && currentTime < 0) {
-                console.log('3')
-                return this.mainText = 'Добрый вечер';
-            }
-            if (currentTime > 0 && currentTime < 6) {
-                return this.mainText = 'Доброй ночи'
-            } else {
-                console.log('ОШИБКА')
-            }
-
-        }
-    }
-
+    props: ['text'],
+ 
 }
 </script>

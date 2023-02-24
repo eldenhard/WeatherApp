@@ -42,13 +42,13 @@ export default {
 
 .loader span {
     display: inline-block;
-    -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-    animation: pulse 0.4s alternate infinite ease-in-out;
+    -webkit-animation: pulse 0.35s alternate infinite ease-in-out;
+    animation: pulse 0.35s alternate infinite ease-in-out;
 }
 
 .loader span:nth-child(odd) {
-    -webkit-animation-delay: 0.4s;
-    animation-delay: 0.4s;
+    -webkit-animation-delay: 0.35s;
+    animation-delay: 0.35s;
 }
 
 @-webkit-keyframes pulse {
